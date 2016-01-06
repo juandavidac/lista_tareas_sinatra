@@ -1,0 +1,26 @@
+<%array=Tarea.all%>
+<%done= array.map {|hash| hash["done"]} %>
+<%if array.none? %>
+  <%="Ingresa alguna tarea"%>
+<%end%>
+<%if done.all? {|x| x==false} && array.any?%>
+  <%="No tienes tareas finalizadas"%>
+<%else%>
+  <%array.each do |hash|%>
+    <%if hash["done"]==true%>
+        <table>
+          <tr>
+            <td width="350px">
+              <%=hash["title"]%>
+            </td>
+            <td>
+              <form action="/tarea/<%=hash["id"]%>/eliminar" method="post">
+                <input type="hidden" name="_method" value="delete">
+                <input type="submit"value ="eliminar">
+              </form>
+            </td>
+         </tr>
+       </table>
+    <%end%>
+  <%end%>
+<%end%>

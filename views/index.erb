@@ -1,0 +1,44 @@
+<a><h2>Agregar tarea</h2></a>
+<p style="font-size:80%;">(Separa las palabras con guión bajo, sin tildes ni ñ)</p>
+  <form action="/nueva/tarea" method="post">
+    <input type="text" name="titulo">
+    <input type="submit" value="agregar">
+  </form>
+
+
+<a href="/completadas"><h2>Tareas finalizadas</h2></a>
+
+<h2>Pendientes</h2>
+
+  <%array=Tarea.all%>
+  <%done= array.map {|hash| hash["done"]} %>
+    <%if array.none? %>
+      <%="Ingresa alguna tarea"%>
+    <%end%>
+    <%if done.all? {|x| x==true} && array.any?%>
+      <%="No tienes tareas pendientes"%>
+    <%else%>
+      <%array.each do |hash|%>
+        <%if hash["done"]==false%>
+          <table>
+            <tr>
+              <td width="350px">
+                <%=hash["title"]%>
+              </td>
+              <td>
+                <form action="/tarea/<%=hash["id"]%>/actualizar" method="post">
+                  <input type="hidden" name="_method" value="patch">
+                  <input type="submit"value ="actualizar">
+                </form>
+              </td>
+              <td>
+                <form action="/tarea/<%=hash["id"]%>/eliminar" method="post">
+                  <input type="hidden" name="_method" value="delete">
+                  <input type="submit"value ="eliminar">
+                </form>
+              </td>
+            </tr>
+          </table>
+        <%end%>
+      <%end%>
+    <%end%>
